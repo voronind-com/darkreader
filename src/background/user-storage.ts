@@ -119,7 +119,7 @@ export default class UserStorage {
             UserStorage.migrateAutomationSettings(local);
             UserStorage.fillDefaults(local);
             UserStorage.loadBarrier.resolve(local);
-            return local;
+            return managed;
         }
 
         const $sync = await readSyncStorage(managed);
@@ -129,7 +129,7 @@ export default class UserStorage {
             UserStorage.set({syncSettings: false});
             UserStorage.saveSyncSetting(false);
             UserStorage.loadBarrier.resolve(local);
-            return local;
+            return managed;
         }
 
         const {errors: syncCfgErrors} = validateSettings($sync);
@@ -139,7 +139,7 @@ export default class UserStorage {
         UserStorage.fillDefaults($sync);
 
         UserStorage.loadBarrier.resolve($sync);
-        return $sync;
+        return managed;
     }
 
     static async saveSettings(): Promise<void> {
